@@ -1,6 +1,16 @@
+/* ENGGEN131 C Project 2022 - Boulder Break */
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#define CAVE_SIZE 10
 #include <string.h>
+
+#define CAVE_SIZE 10
+
+// Your function definitions should go here...
+void InitialiseStory(char* paragraph)
+{
+	char temp[2000] = "You are an adventurer on your way to find some treasure.\nAlong the way you entered a cave and got stuck.\nTo escape the cave and collect the treasure,\nyou must push the boulders into holes that block the exit.\nGood luck on your adventures.";
+	strcpy(paragraph, temp); 
+}
 
 void InitialiseCave(int cave[CAVE_SIZE][CAVE_SIZE], char* layout)
 {
@@ -118,93 +128,98 @@ int MakeMove(int cave[CAVE_SIZE][CAVE_SIZE], char move)
 {
 	int row;
 	int col;
-
 	for (row = 0; row < CAVE_SIZE; row++) {
 		for (col = 0; col < CAVE_SIZE; col++) {
-			if (cave[row][col] == 40) {
-				if ((move == 'w') && ((cave[row - 1][col] == 0) || (cave[row - 1][col] == -5))) {
-					cave[row - 1][col] = 40;
+			//when there's treasure -5 or empty space
+			if ((move == 'w') && (cave[row][col] == 40)) {
+				if ((cave[row - 1][col] == 0) || (cave[row - 1][col] == -5)) {
+					cave[row - 1][col] = 40; //w up
 					cave[row][col] = 0;
 					return 0;
 				}
-				else if ((move == 'a') && ((cave[row][col - 1] == 0) || (cave[row][col - 1] == -5))) {
-					cave[row][col - 1] = 40;
+			}
+			else if ((move == 'a') && (cave[row][col] == 40)) {
+				if ((cave[row][col - 1] == 0) || (cave[row][col - 1] == -5)) {
+					cave[row][col - 1] = 40; //a left
 					cave[row][col] = 0;
 					return 0;
 				}
-				else if ((move == 's') && ((cave[row + 1][col] == 0) || (cave[row + 1][col] == -5))) {
-					cave[row + 1][col] = 40;
+
+			}
+			else if ((move == 's') && (cave[row][col] == 40)) {
+				if ((cave[row + 1][col] == 0) || (cave[row + 1][col] == -5)) {
+					cave[row + 1][col] = 40; //s down
 					cave[row][col] = 0;
 					return 0;
 				}
-				else if ((move == 'd') && ((cave[row][col + 1] == 0) || (cave[row][col + 1] == -5))) {
-					cave[row][col + 1] = 40;
+
+			}
+			else if ((move == 'd') && (cave[row][col] == 40)) {
+				if ((cave[row][col + 1] == 0) || (cave[row][col + 1] == -5)) {
+					cave[row][col + 1] = 40; //d right
 					cave[row][col] = 0;
 					return 0;
 				}
-				else {
-				}
+
 			}
 		}
 	}
-
 	for (row = 0; row < CAVE_SIZE; row++) {
 		for (col = 0; col < CAVE_SIZE; col++) {
-			if (cave[row][col] == 40) {
-				if ((move == 'w') && (cave[row - 1][col] == 31)) {
-					int n = 2;
-					while ((cave[row - n][col] != -6) && (cave[row - n][col] != -5) && (cave[row - n][col] != 1) && (cave[row - n][col] != 31)) {
-						cave[row - n][col] = 31;
-						cave[row - n + 1][col] = 0;
-						n++;
-					}
-					if (cave[row - n][col] == -6) {
-						cave[row - n + 1][col] = 0;
-						cave[row - n][col] = 0;
-					}
-					return 0;
+			//when player moves a boulder 31 into a hole -6
+			if ((move == 'w') && (cave[row - 1][col] == 31) && (cave[row][col] == 40) && (cave[row - 2][col] == -6)) {
+				cave[row - 1][col] = 0; //w up
+				cave[row - 2][col] = 0;
+				return 0;
+			}
+			else if ((move == 'a') && (cave[row][col - 1] == 31) && (cave[row][col] == 40) && (cave[row][col - 2] == -6)) {
+				cave[row][col - 1] = 0; //a left
+				cave[row][col - 2] = 0;
+				return 0;
+			}
+			else if ((move == 's') && (cave[row + 1][col] == 31) && (cave[row][col] == 40) && (cave[row + 2][col] == -6)) {
+				cave[row + 1][col] = 0; //s down
+				cave[row + 1][col] = 0;
+				return 0;
+			}
+			else if ((move == 'd') && (cave[row][col + 1] == 31) && (cave[row][col] == 40) && (cave[row][col + 2] == -6)) {
+				cave[row][col + 1] = 0; //d right
+				cave[row][col + 1] = 0;
+				return 0;
+			}
+		}
+	}
+	for (row = 0; row < CAVE_SIZE; row++) {
+		for (col = 0; col < CAVE_SIZE; col++) {
+			//when player pushes boulder 31
+			int i = 0;
+			if ((move == 'w') && (cave[row - 1][col] == 31) && (cave[row][col] == 40)) {
+				while (cave[row][col] == 0) {
+					cave[row - i][col] = 31;
+					i++;
 				}
-				else if ((move == 'a') && (cave[row][col - 1] == 31)) {
-					int n = 2;
-					while ((cave[row][col - n] != -6) && (cave[row][col - n] != -5) && (cave[row][col - n] != 1) && (cave[row][col - n] != 31)) {
-						cave[row][col - n] = 31;
-						cave[row][col - n + 1] = 0;
-						n++;
-					}
-					if (cave[row][col - n] == -6) {
-						cave[row][col - n + 1] = 0;
-						cave[row][col - n] = 0;
-					}
-					return 0;
+				return 0;
+			}
+			else if ((move == 'a') && (cave[row][col - 1] == 31) && (cave[row][col] == 40)) {
+				while (cave[row][col] == 0) {
+					cave[row][col - i] = 31;
+					i++;
 				}
-				else if ((move == 's') && (cave[row + 1][col] == 31)) {
-					int n = 2;
-					while ((cave[row + n][col] != -6) && (cave[row + n][col] != -5) && (cave[row + n][col] != 1) && (cave[row + n][col] != 31)) {
-						cave[row + n][col] = 31;
-						cave[row + n - 1][col] = 0;
-						n++;
-					}
-					if (cave[row + n][col] == -6) {
-						cave[row + n - 1][col] = 0;
-						cave[row + n][col] = 0;
-					}
-					return 0;
+				return 0;
+			}
+			else if ((move == 's') && (cave[row + 1][col] == 31) && (cave[row][col] == 40)) {
+				while (cave[row][col] == 0) {
+					cave[row + i][col] = 31;
+					i++;
 				}
-				else if ((move == 'd') && (cave[row][col + 1] == 31)) {
-					int n = 2;
-					while ((cave[row][col + n] != -6) && (cave[row][col + n] != -5) && (cave[row][col + n] != 1) && (cave[row][col + n] != 31)) {
-						cave[row][col + n] = 31;
-						cave[row][col + n - 1] = 0;
-						n++;
-					}
-					if (cave[row][col + n] == -6) {
-						cave[row][col + n - 1] = 0;
-						cave[row][col + n] = 0;
-					}
-					return 0;
+				return 0;
+			}
+			else if ((move == 'd') && (cave[row][col + 1] == 31) && (cave[row][col] == 40)) {
+				while (cave[row][col] == 0) {
+					cave[row][col + i] = 31;
+					i++;
 				}
-				else {
-				}
+				return 0;
 			}
 		}
 	}
@@ -254,31 +269,62 @@ int MakeMove(int cave[CAVE_SIZE][CAVE_SIZE], char move)
 			}
 		}
 	}
-	return 0;
 }
 
+
+/* GetMove() returns the entered character. Invalid characters ignored */
+char GetMove(void)
+{
+	char move;
+	printf("\nEnter move: ");
+	scanf("%c", &move);
+	// Ignore any characters that are invalid
+	while ((move != 'w') && (move != 'a') && (move != 's') && (move != 'd')) {
+		scanf("%c", &move);
+	}
+	return move;
+}
+
+/* The Boulder Break simulation */
 int main(void)
 {
-	char layout[200] = "1111111111100000000110000000011000000001100000000E10000000011000000001100000000110000000011111111111";
-	int cave[CAVE_SIZE][CAVE_SIZE] = { 0 };
+	char story[2000];
+	char layout[200] = "1111111111111000001111000000111000000001100000000E10010000011100000011111000001111111001111111111111";
+	int cave[CAVE_SIZE][CAVE_SIZE] = {0};
+	int gameOver = 0;
+
+	InitialiseStory(story);
 	InitialiseCave(cave, layout);
-	AddItem(cave, 7, 3, "player");
-	AddItem(cave, 2, 2, "boulder");
-	AddItem(cave, 2, 3, "boulder");
-	AddItem(cave, 4, 6, "boulder");
-	AddItem(cave, 5, 7, "boulder");
-	AddItem(cave, 6, 8, "boulder");
-	AddItem(cave, 7, 1, "hole");
-	AddItem(cave, 8, 3, "hole");
-	AddItem(cave, 6, 4, "treasure");
-	AddItem(cave, 3, 5, "treasure");
-	AddItem(cave, 1, 1, "treasure");
-	AddItem(cave, 8, 8, "treasure");
-	AddItem(cave, 5, 1, "hole");
-	AddItem(cave, 6, 1, "hole");
+	AddItem(cave, 2, 4, "boulder");
+	AddItem(cave, 5, 6, "boulder");
+	AddItem(cave, 4, 8, "hole");
+	AddItem(cave, 1, 4, "treasure");
+	AddItem(cave, 4, 5, "player");
 
-	MakeMove(cave, 'w');
+	printf("ENGGEN131 - C Project 2022\n");
+	printf("                          ... presents ...\n");
+	printf("______   _____  _     _        ______  _______  ______\n");
+	printf("|_____] |     | |     | |      |     \\ |______ |_____/\n");
+	printf("|_____] |_____| |_____| |_____ |_____/ |______ |    \\_\n");
+	printf("______   ______ _______ _______ _     _\n");
+	printf("|_____] |_____/ |______ |_____| |____/ \n");
+	printf("|_____] |    \\_ |______ |     | |    \\_\n");
+	printf("\n");
+	printf("%s\n", story);
+	printf("\nMove the player (X) using the keys 'w', 'a', 's', 'd'\n");
+	printf("Good luck!\n\n\n");
 
+	/* Main game loop */
 	PrintCave(cave);
+	while (!gameOver) {
+		gameOver = MakeMove(cave, GetMove());
+		PrintCave(cave);
+		if (gameOver == 1) {
+			printf("\n\nGAME OVER!! \nYou died!\n\n");
+		} else if (gameOver == 2) {
+			printf("\n\nCONGRATULATIONS!! \nYou escaped!\n\n");
+		}
+	}
+
 	return 0;
 }
