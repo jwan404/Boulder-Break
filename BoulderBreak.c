@@ -1,11 +1,10 @@
-/* ENGGEN131 C Project 2022 - Boulder Break */
+/*Boulder Break */
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 
 #define CAVE_SIZE 10
 
-// Your function definitions should go here...
 void InitialiseStory(char* paragraph)
 {
 	char temp[2000] = "You are an adventurer on your way to find some treasure.\nAlong the way you entered a cave and got stuck.\nTo escape the cave and collect the treasure,\nyou must push the boulders into holes that block the exit.\nGood luck on your adventures.";
